@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KH LAW OFFICE - Salus Populi Suprema Lex Esto</title>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#09111e]">
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        
+        // Komponen pembungkus agar ikon Lucide biasa bisa dipakai sebagai Komponen React
+        const LucideIcon = ({ name, className = "h-5 w-5" }) => {
+          const [iconSvg, setIconSvg] = useState('');
+
+          useEffect(() => {
+            if (window.lucide && window.lucide.icons[name]) {
+              const svgString = window.lucide.createSvg(window.lucide.icons[name], {
+                class: className,
+                'stroke-width': 2
+              });
+              setIconSvg(svgString);
+            }
+          }, [name, className]);
+
+          return <span dangerouslySetInnerHTML={{ __html: iconSvg }} className="inline-block" />;
+        };
+
+        // Definisikan komponen ikon
+        const Scale = (props) => <LucideIcon name="scale" {...props} />;
+        const Shield = (props) => <LucideIcon name="shield" {...props} />;
+        const Award = (props) => <LucideIcon name="award" {...props} />;
+        const Phone = (props) => <LucideIcon name="phone" {...props} />;
+        const BookOpen = (props) => <LucideIcon name="book-open" {...props} />;
+        const Clock = (props) => <LucideIcon name="clock" {...props} />;
+        const X = (props) => <LucideIcon name="x" {...props} />;
+        const ChevronRight = (props) => <LucideIcon name="chevron-right" {...props} />;
+        const Briefcase = (props) => <LucideIcon name="briefcase" {...props} />;
+        const Menu = (props) => <LucideIcon name="menu" {...props} />;
+        const MapPin = (props) => <LucideIcon name="map-pin" {...props} />;
+        const Camera = (props) => <LucideIcon name="camera" {...props} />;
+
+        // SVG Logos Kustom untuk Brand agar presisi tinggi
+        const WhatsAppLogo = ({ className = "h-4 w-4" }) => (
+          <svg class={className} fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.704 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+        );
+
+        const InstagramLogo = ({ className = "h-4 w-4" }) => (
+          <svg class={className} fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+          </svg>
+        );
+
+        const YouTubeLogo = ({ className = "h-4 w-4" }) => (
+          <svg class={className} fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M23.498 6.163a3.003 3.003 0 00-2.11-2.11C19.517 3.545 12 3.545 12 3.545s-7.517 0-9.388.508a3.003 3.003 0 00-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 002.11 2.11c1.871.508 9.388.508 9.388.508s7.517 0 9.388-.508a3.003 3.003 0 002.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.163zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+          </svg>
+        );
+
+        const TikTokLogo = ({ className = "h-4 w-4" }) => (
+          <svg class={className} fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.01 1.63 4.14 1.13 1.18 2.7 1.91 4.34 2.1v3.91c-1.78-.01-3.52-.53-5-1.52-.01 2.53 0 5.07-.01 7.6-.07 1.83-.68 3.65-1.8 5.07-1.63 2.02-4.22 3.14-6.81 2.92-2.82-.12-5.41-1.95-6.52-4.52-1.37-3.04-.6-6.84 1.94-9.06 1.76-1.55 4.17-2.16 6.46-1.67v4.06c-1.21-.33-2.55-.07-3.54.72-1.07.82-1.52 2.32-1.12 3.63.4 1.45 1.79 2.51 3.3 2.5 1.41.05 2.72-.94 2.99-2.34.05-.4.04-.81.04-1.22l.02-13.91z"/>
+          </svg>
+        );
+
+        const GoogleGmailLogo = ({ className = "h-4 w-4" }) => (
+          <svg class={className} fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24 5.457v13.086c0 .804-.652 1.457-1.457 1.457h-3.886v-8.286L12 15.686l-6.657-4.03v8.286H1.457C.652 20 0 19.347 0 18.543V5.457c0-.98 1.056-1.594 1.914-1.103l10.086 6.109 10.086-6.109c.858-.491 1.914.123 1.914 1.103z"/>
+          </svg>
+        );
+
+        const BlogspotLogo = ({ className = "h-4 w-4" }) => (
+          <svg class={className} fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16.17 0H7.83A7.84 7.84 0 000 7.83v8.34A7.84 7.84 0 007.83 24h8.34A7.84 7.84 0 0024 16.17V7.83A7.84 7.84 0 0016.17 0zm-2.45 14.83h-3.44v1.89c0 .76-.6 1.36-1.36 1.36s-1.36-.6-1.36-1.36v-6.73c0-.76.6-1.36 1.36-1.36h4.8c1.32 0 2.39 1.07 2.39 2.39a2.38 2.38 0 01-2.39 2.35zm2.39-4.73a1.03 1.03 0 00-1.03-1.03h-3.8v2.06h3.8a1.03 1.03 0 001.03-1.03z"/>
+          </svg>
+        );
+
+        const TypographyStyles = () => (
+          <style dangerouslySetInnerHTML={{__html: `
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+            
+            .font-serif-law {
+              font-family: 'Playfair Display', Georgia, serif;
+            }
+            .font-sans-law {
+              font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            }
+            
+            ::-webkit-scrollbar {
+              width: 8px;
+            }
+            ::-webkit-scrollbar-track {
+              background: #09111e;
+            }
+            ::-webkit-scrollbar-thumb {
+              background: #c5a880;
+              border-radius: 4px;
+            }
+            ::-webkit-scrollbar-thumb:hover {
+              background: #d4af37;
+            }
+
+            @keyframes scroll {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(calc(-250px * 4 - 1.5rem * 4)); }
+            }
+            .animate-scroll {
+              display: flex;
+              width: calc(250px * 8 + 1.5rem * 8);
+              animation: scroll 25s linear infinite;
+            }
+            .animate-scroll:hover {
+              animation-play-state: paused;
+            }
+
+            @keyframes typing {
+              from { width: 0 }
+              to { width: 100% }
+            }
+            @keyframes blink-caret {
+              from, to { border-color: transparent }
+              50% { border-color: #facc15; }
+            }
+            .animate-typewriter {
+              overflow: hidden;
+              border-right: 3px solid #facc15;
+              white-space: nowrap;
+              margin: 0 auto;
+              letter-spacing: .05em;
+              animation: 
+                typing 3.5s steps(40, end),
+                blink-caret .75s step-end infinite;
+            }
+
+            @keyframes pageFadeIn {
+              from {
+                opacity: 0;
+                transform: translateY(15px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+            .tab-content-animate {
+              animation: pageFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            }
+
+            @keyframes slideDownMenu {
+              from {
+                opacity: 0;
+                transform: translateY(-10px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+            .mobile-menu-animate {
+              animation: slideDownMenu 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            }
+          `}} />
+        );
+
+        const ATTORNEYS = [
+          {
+            id: 1,
+            name: "Achmad Zia Khakim, S.H., M.H.",
+            role: "Founder Partner",
+            image: "WhatsApp Image 2026-07-02 at 15.08.01.jpeg",
+            specialties: ["Hukum Korporasi", "Hukum Bisnis & Investasi", "Arbitrase"],
+            education: ["S1 Hukum - Universitas Islam Negeri (UIN) Surakarta", "S2 Magister Hukum - Universitas Muhammadiyah Surakarta (UMS)"],
+            experience: "Berpengalaman lebih dari 5 tahun menangani restrukturisasi perusahaan multinasional and sengketa niaga internasional.",
+            licenses: "Anggota PERADI (Perhimpunan Advokat Indonesia), Kurator & Pengurus Sertifikasi.",
+            cases: "Berhasil menyelesaikan sengketa akuisisi senilai Rp 1.2 Triliun pada tahun 2024."
+          }
+        ];
+
+        const DOCUMENTATIONS = [
+          { id: 1, url: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=500", title: "Persidangan Perdata" },
+          { id: 2, url: "https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&q=80&w=500", title: "Mediasi Klien" },
+          { id: 3, url: "https://images.unsplash.com/photo-1453728148627-496b818a1a2b?auto=format&fit=crop&q=80&w=500", title: "Penandatanganan Kontrak" },
+          { id: 4, url: "https://images.unsplash.com/photo-1505664194762-809f08f7c09d?auto=format&fit=crop&q=80&w=500", title: "Konsultasi Hukum" },
+        ];
+
+        const PRACTICE_AREAS = [
+          { id: "perdata-pidana", title: "Perkara Perdata dan Pidana Umum", icon: "scale", longDesc: "Tim pengacara kami siap menangani sengketa hak keperdataan perorangan, sengketa kepemilikan, sengketa kontrak dagang, serta memberikan pembelaan hukum litigasi yang agresif dan strategis pada setiap tingkat pemeriksaan perkara pidana umum." },
+          { id: "agraria", title: "Perkara Agraria (Pertanahan)", icon: "map-pin", longDesc: "Urusan pertanahan memiliki kompleksitas tinggi di Indonesia. Kami berpengalaman memetakan sejarah kepemilikan tanah, menangani kasus penyerobotan lahan, sengketa mafia tanah, hingga sengketa administrasi sertifikat di BPN." },
+          { id: "bisnis", title: "Perkara Bisnis dan Perusahaan", icon: "briefcase", longDesc: "Kami menyediakan perlindungan hukum terintegrasi agar operasional bisnis Anda berjalan di atas koridor hukum yang aman. Pendampingan mencakup sengketa internal perusahaan, draf kontrak bisnis, kepatuhan hukum korporasi hingga restrukturisasi sengketa pemegang saham." },
+          { id: "investasi", title: "Perkara Investasi dan Penanaman Modal", icon: "award", longDesc: "Pendampingan hukum strategis terkait struktur modal, investasi domestik maupun asing (PMA/PMDN), kepatuhan izin modal, penyusunan draf usaha patungan, risiko hukum investasi, hingga penyelesaian sengketa investasi modal pihak ketiga." },
+          { id: "waris-keluarga", title: "Perkara Waris dan Keluarga", icon: "users", longDesc: "Kami mengurus berbagai macam perkara keluarga dan permohonan keperdataan penting seperti: Permohonan Perwalian Anak, Permohonan Wali Adhol, Permohonan Isbat Nikah, Permohonan Penetapan Ahli Waris, Permohonan Pembatalan Perkawinan, Permohonan Dispensasi Nikah, serta Permohonan Izin Poligami." },
+          { id: "ketenagakerjaan", title: "Perkara Ketenagakerjaan", icon: "user", longDesc: "Kami menjembatani kepentingan pengusaha maupun pekerja dalam menyelaraskan hak and kewajiban sesuai undang-undang ketenagakerjaan yang berlaku, baik melalui jalur bipartit, tripartit, hingga pengadilan hubungan industrial (PHI)." },
+          { id: "kepailitan", title: "Kepailitan dan PKPU", icon: "dollar-sign", longDesc: "Bertindak sebagai kuasa hukum debitur maupun kreditur dalam mempertahankan aset keuangan, menyusun rencana perdamaian Penundaan Kewajiban Pembayaran Utang (PKPU), restrukturisasi utang korporasi skala besar, hingga permohonan pailit." },
+          { id: "tun", title: "Perkara Tata Usaha Negara", icon: "shield", longDesc: "Menangani pembelaan atas keputusan sewenang-wenang instansi pemerintah atau keputusan administratif yang merugikan perorangan/badan hukum swasta, pembatalan surat keputusan izin usaha cacat hukum, hingga sengketa kepegawaian tata usaha." },
+          { id: "non-litigasi", title: "Layanan Dokumen & Jasa Non-Litigasi", icon: "file-text", longDesc: "Layanan penanganan preventif sebelum sengketa masuk ke pengadilan. Kami membantu merumuskan Mediasi perdamaian, melakukan Kontrak Drafting yang aman, mengeluarkan Legal Opinion (pendapat hukum ahli), mengirimkan Somasi teguran keras, serta pengurusan Laporan Pengaduan & Pelaporan Kepolisian." }
+        ];
+
+        const BLOG_POSTS = [
+          {
+            id: 1,
+            title: "Mengenal UU Cipta Kerja Terbaru: Implikasi Bagi Startup & UMKM",
+            category: "Bisnis & Korporasi",
+            date: "28 Juni 2026",
+            summary: "Panduan lengkap mengenai perubahan regulasi perizinan usaha mikro dan kecil pasca penyesuaian aturan turunan UU Cipta Kerja.",
+            content: "Perubahan konstan dalam hukum korporasi menuntut para pelaku usaha, terutama startup dan UMKM, untuk selalu waspada. Regulasi terbaru memberikan kemudahan perizinan berbasis risiko (RBA). Namun, kepatuhan terhadap aspek ketenagakerjaan, perpajakan, dan perlindungan konsumen kini dipantau lebih ketat lewat audit digital oleh kementerian terkait.",
+            readTime: "5 Menit Baca"
+          }
+        ];
+
+        function App() {
+          const [activeTab, setActiveTab] = useState('home');
+          const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+          const [animationKey, setAnimationKey] = useState(0);
+
+          useEffect(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setAnimationKey(prev => prev + 1);
+          }, [activeTab]);
+
+          return (
+            <div className="min-h-screen bg-[#09111e] text-slate-100 font-sans-law flex flex-col justify-between">
+              <TypographyStyles />
+
+              {/* NAVBAR UTAMA - RESPONSIF UNTUK SEMUA DEVICE */}
+              <header className="sticky top-0 z-50 bg-[#0d1a2e] border-b border-yellow-500/30 shadow-2xl">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <div className="flex items-center justify-between h-20">
+                    
+                    {/* LOGO */}
+                    <div className="flex items-center cursor-pointer" onClick={() => setActiveTab('home')}>
+                      <div className="p-2 bg-gradient-to-br from-yellow-600 to-yellow-400 rounded-lg mr-3 shadow-md">
+                        <Scale className="h-6 w-6 sm:h-7 sm:w-7 text-slate-950" />
+                      </div>
+                      <div>
+                        <span className="block text-lg sm:text-xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-yellow-200 to-yellow-500 font-serif-law leading-none">
+                          KH LAW OFFICE
+                        </span>
+                        <span className="block text-[8px] sm:text-[9px] uppercase tracking-widest text-yellow-500/80 font-semibold italic mt-1">
+                          Salus Populi Suprema Lex Esto
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* MENU DESKTOP & TABLET LANDSCAPE (md:flex) */}
+                    <nav className="hidden md:flex items-center space-x-4 lg:space-x-8">
+                      {[
+                        { id: 'home', label: 'Beranda' },
+                        { id: 'about', label: 'Tentang Kami' },
+                        { id: 'practices', label: 'Area Praktik' },
+                        { id: 'blog', label: 'Edukasi Hukum' }
+                      ].map((tab) => (
+                        <button
+                          key={tab.id}
+                          onClick={() => setActiveTab(tab.id)}
+                          className={`text-xs lg:text-sm font-semibold tracking-wide transition-all duration-300 relative py-2 ${
+                            activeTab === tab.id ? 'text-yellow-400 font-bold scale-105' : 'text-slate-200 hover:text-yellow-400'
+                          }`}
+                        >
+                          {tab.label}
+                          <span className={`absolute bottom-0 left-0 h-[2.5px] bg-gradient-to-r from-yellow-500 to-yellow-300 rounded transition-all duration-300 ${activeTab === tab.id ? 'w-full' : 'w-0'}`} />
+                        </button>
+                      ))}
+                    </nav>
+
+                    {/* POJOK KANAN: ICON SOSMED HEADER & TOMBOL NAV BAR 3 GARIS */}
+                    <div className="flex items-center space-x-2 sm:space-x-4">
+                      
+                      <div className="hidden sm:flex items-center space-x-1.5 md:space-x-2 bg-slate-900/60 p-1.5 rounded-xl border border-slate-800">
+                        <a href="https://wa.me/6285642238046" target="_blank" rel="noreferrer" class="p-1 text-emerald-400 hover:text-emerald-300 transition-all transform hover:scale-110" title="WhatsApp"><WhatsAppLogo className="h-4 w-4" /></a>
+                        <a href="https://instagram.com/klienhukum" target="_blank" rel="noreferrer" class="p-1 text-pink-400 hover:text-pink-300 transition-all transform hover:scale-110" title="Instagram"><InstagramLogo className="h-4 w-4" /></a>
+                        <a href="https://klienhukum.blogspot.com" target="_blank" rel="noreferrer" class="p-1 text-orange-400 hover:text-orange-300 transition-all transform hover:scale-110" title="Blog"><BlogspotLogo className="h-4 w-4" /></a>
+                      </div>
+
+                      {/* TOMBOL MENU 3 GARIS UTAMA (md:hidden) */}
+                      <button 
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
+                        className="p-2 text-yellow-400 bg-slate-900 border border-yellow-500/40 rounded-xl transition-all duration-200 focus:outline-none hover:bg-yellow-500/10 md:hidden"
+                        title="Menu Navigasi"
+                      >
+                        {isMobileMenuOpen ? <X className="h-5 w-5 transition-transform rotate-90" /> : <Menu className="h-5 w-5" />}
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+
+                {/* MOBILE MENU DROPDOWN (md:hidden) */}
+                {isMobileMenuOpen && (
+                  <div className="md:hidden bg-[#0d1a2e] border-t border-yellow-500/20 px-4 pt-2 pb-6 space-y-1 mobile-menu-animate shadow-2xl">
+                    {[
+                      { id: 'home', label: 'Beranda' },
+                      { id: 'about', label: 'Tentang Kami' },
+                      { id: 'practices', label: 'Area Praktik' },
+                      { id: 'blog', label: 'Edukasi Hukum' }
+                    ].map((tab) => (
+                      <button
+                        key={tab.id}
+                        onClick={() => { setActiveTab(tab.id); setIsMobileMenuOpen(false); }}
+                        className={`block w-full text-left px-4 py-3 rounded-xl transition-all font-bold text-sm ${
+                          activeTab === tab.id 
+                            ? 'bg-gradient-to-r from-yellow-500/20 to-yellow-500/5 text-yellow-400 border-l-4 border-yellow-500 pl-3' 
+                            : 'text-slate-200 hover:bg-slate-800/80 hover:text-yellow-400'
+                        }`}
+                      >
+                        {tab.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </header>
+
+              {/* MAIN CONTENT CONTAINER */}
+              <main key={animationKey} className="flex-grow tab-content-animate">
+                {activeTab === 'home' && (
+                  <div>
+                    <section className="relative min-h-[75vh] sm:min-h-[85vh] flex items-center justify-center py-12 sm:py-20 px-4 bg-cover bg-center" style={{ backgroundImage: "linear-gradient(rgba(9, 17, 30, 0.9), rgba(9, 17, 30, 0.92)), url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=1600')" }}>
+                      <div className="max-w-5xl mx-auto text-center space-y-6 sm:space-y-8 z-10">
+                        <div className="inline-flex items-center space-x-2 bg-yellow-500/10 border border-yellow-500/30 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold text-yellow-400 uppercase tracking-wider">
+                          <Shield className="h-3.5 w-3.5" />
+                          <span>Advokat Terpercaya & Berlisensi PERADI</span>
+                        </div>
+                        
+                        <div className="max-w-full overflow-hidden py-2">
+                          <h1 className="text-xl sm:text-3xl md:text-5xl font-serif-law leading-tight text-white font-bold animate-typewriter">
+                            Keadilan, Integritas, dan <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-yellow-200 to-yellow-500">Solusi Hukum</span>
+                          </h1>
+                        </div>
+
+                        <p className="text-xs sm:text-sm md:text-base text-slate-300 max-w-2xl mx-auto italic px-2">
+                          "Salus Populi Suprema Lex Esto" — Kesejahteraan Masyarakat adalah Hukum Tertinggi.
+                        </p>
+                        <div className="flex justify-center pt-4">
+                          <button onClick={() => setActiveTab('practices')} className="px-8 py-4 rounded-xl bg-gradient-to-r from-yellow-500 to-yellow-600 text-slate-950 font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-md">
+                            Pelajari Layanan Kami
+                          </button>
+                        </div>
+                      </div>
+                    </section>
+
+                    <section className="py-12 sm:py-20 bg-[#0d1a2e]">
+                      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                        <h2 className="text-xs uppercase text-yellow-500 font-bold tracking-widest mb-2">Keunggulan Kami</h2>
+                        <p className="text-2xl sm:text-3xl font-serif-law font-bold text-white">Mengapa Memilih KH LAW OFFICE?</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mt-10 sm:mt-12">
+                          <div className="p-6 sm:p-8 bg-[#09111e] rounded-xl border border-yellow-600/10 hover:border-yellow-500/30 transition-all duration-300 shadow-lg">
+                            <Shield className="h-7 w-7 text-yellow-400 mx-auto mb-4" />
+                            <h3 className="text-base sm:text-lg font-bold text-white mb-2">Integritas & Kerahasiaan</h3>
+                            <p className="text-xs text-slate-400 leading-relaxed">Kami menjamin seluruh berkas dan informasi hukum Anda rahasia 100%.</p>
+                          </div>
+                          <div className="p-6 sm:p-8 bg-[#09111e] rounded-xl border border-yellow-600/10 hover:border-yellow-500/30 transition-all duration-300 shadow-lg">
+                            <Award className="h-7 w-7 text-yellow-400 mx-auto mb-4" />
+                            <h3 className="text-base sm:text-lg font-bold text-white mb-2">Rekam Jejak Terbukti</h3>
+                            <p className="text-xs text-slate-400 leading-relaxed">Advokat berpengalaman puluhan tahun menangani berbagai kasus sengketa besar.</p>
+                          </div>
+                          <div className="p-6 sm:p-8 bg-[#09111e] rounded-xl border border-yellow-600/10 hover:border-yellow-500/30 transition-all duration-300 shadow-lg sm:col-span-2 lg:col-span-1">
+                            <Clock className="h-7 w-7 text-yellow-400 mx-auto mb-4" />
+                            <h3 className="text-base sm:text-lg font-bold text-white mb-2">Komunikasi Transparan</h3>
+                            <p className="text-xs text-slate-400 leading-relaxed">Tidak ada biaya tersembunyi. Update laporan kasus berkala yang transparan.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                )}
+
+                {/* TENTANG KAMI + GALERI SLIDER */}
+                {activeTab === 'about' && (
+                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-12 sm:space-y-16">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
+                      <div className="space-y-4 sm:space-y-6 text-center lg:text-left">
+                        <h1 className="text-3xl sm:text-4xl font-serif-law font-bold text-white">KH LAW OFFICE</h1>
+                        <p className="text-xs text-yellow-500 uppercase tracking-widest font-semibold italic">Salus Populi Suprema Lex Esto</p>
+                        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">Didirikan pada tahun 2023, KH LAW OFFICE telah tumbuh menjadi firma hukum tepercaya yang berdedikasi tinggi menegakkan hak-hak legal para klien dengan pendekatan modern, solutif, dan penuh integritas.</p>
+                      </div>
+                      <div className="w-full max-w-md mx-auto lg:max-w-none">
+                        <img src="https://images.unsplash.com/photo-1453728148627-496b818a1a2b?auto=format&fit=crop&q=80&w=1000" className="rounded-xl border border-yellow-500/20 shadow-2xl w-full object-cover h-64 sm:h-80" />
+                      </div>
+                    </div>
+
+                    {/* PROFIL TIM ADVOKAT */}
+                    <div className="max-w-md mx-auto px-2">
+                      <div className="text-center mb-8 sm:mb-10">
+                        <h2 className="text-xs uppercase text-yellow-500 font-bold tracking-wider mb-2">Para Ahli Hukum Kami</h2>
+                        <p className="text-xl sm:text-2xl font-serif-law font-bold text-white">Kenali Tim Advokat & Partner</p>
+                        <div className="w-12 h-0.5 bg-yellow-500 mx-auto mt-2 rounded-full"></div>
+                      </div>
+
+                      {ATTORNEYS.map(attorney => (
+                        <div key={attorney.id} className="bg-[#0d1a2e] border border-slate-800 rounded-xl overflow-hidden shadow-xl hover:border-yellow-500/30 transition-all duration-300">
+                          <img src={attorney.image} className="w-full h-72 sm:h-80 object-cover object-top" />
+                          <div className="p-5 sm:p-6 space-y-4">
+                            <div>
+                              <h3 className="text-lg sm:text-xl font-bold text-white font-serif-law">{attorney.name}</h3>
+                              <p className="text-xs text-yellow-400 font-medium mt-0.5">{attorney.role}</p>
+                            </div>
+                            
+                            <div className="flex flex-wrap gap-1.5 pt-1">
+                              {attorney.specialties.map((spec, index) => (
+                                <span key={index} className="px-2 py-0.5 bg-slate-800 text-[10px] text-slate-300 rounded">
+                                  {spec}
+                                </span>
+                              ))}
+                            </div>
+
+                            <p className="text-xs text-slate-400 leading-relaxed pt-2 border-t border-slate-800/80">
+                              {attorney.experience}
+                            </p>
+
+                            <div className="space-y-1 text-[11px] text-slate-300">
+                              <span className="block text-[10px] uppercase text-yellow-500 font-bold tracking-wider">Riwayat Akademis:</span>
+                              <ul className="list-disc pl-4 space-y-0.5">
+                                {attorney.education.map((edu, idx) => <li key={idx}>{edu}</li>)}
+                              </ul>
+                            </div>
+
+                            <div className="p-3 bg-[#09111e] rounded border-l-2 border-yellow-500 text-[11px] text-slate-300 italic leading-relaxed">
+                              "{attorney.cases}"
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* SLIDER GALERI KEGIATAN */}
+                    <div className="pt-6 sm:pt-8">
+                      <div className="text-center mb-8">
+                        <h2 className="text-xs uppercase text-yellow-500 font-bold mb-2 flex items-center justify-center gap-1.5 tracking-wider">
+                          <Camera className="h-3.5 w-3.5" /> Galeri Kegiatan
+                        </h2>
+                        <p className="text-xl sm:text-2xl font-serif-law font-bold text-white">Dokumentasi KH Law Office</p>
+                        <div className="w-12 h-0.5 bg-yellow-500 mx-auto mt-2 rounded-full"></div>
+                      </div>
+
+                      <div className="relative w-full overflow-hidden before:absolute before:left-0 before:top-0 before:z-10 before:h-full before:w-12 sm:before:w-20 before:bg-gradient-to-r before:from-[#09111e] before:to-transparent after:absolute after:right-0 after:top-0 after:z-10 after:h-full after:w-12 sm:after:w-20 after:bg-gradient-to-l after:from-[#09111e] after:to-transparent">
+                        <div className="animate-scroll gap-4 sm:gap-6">
+                          {DOCUMENTATIONS.map((doc, idx) => (
+                            <div key={`doc-1-${idx}`} className="w-[220px] sm:w-[250px] shrink-0 group relative rounded-xl overflow-hidden border border-slate-800 bg-[#0d1a2e]">
+                              <img src={doc.url} alt={doc.title} className="w-full h-36 sm:h-40 object-cover group-hover:scale-105 transition-transform duration-500" />
+                              <div className="p-3 bg-[#0d1a2e]">
+                                <p className="text-[11px] font-semibold text-slate-300 line-clamp-1">{doc.title}</p>
+                              </div>
+                            </div>
+                          ))}
+                          {DOCUMENTATIONS.map((doc, idx) => (
+                            <div key={`doc-2-${idx}`} className="w-[220px] sm:w-[250px] shrink-0 group relative rounded-xl overflow-hidden border border-slate-800 bg-[#0d1a2e]">
+                              <img src={doc.url} alt={doc.title} className="w-full h-36 sm:h-40 object-cover group-hover:scale-105 transition-transform duration-500" />
+                              <div className="p-3 bg-[#0d1a2e]">
+                                <p className="text-[11px] font-semibold text-slate-300 line-clamp-1">{doc.title}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* AREA LAYANAN */}
+                {activeTab === 'practices' && (
+                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+                    <div className="text-center mb-10 sm:mb-12">
+                      <h2 className="text-xs uppercase text-yellow-500 font-bold tracking-widest mb-2">Pilar Kantor Hukum</h2>
+                      <p className="text-2xl sm:text-3xl font-serif-law font-bold text-white">Layanan Kami</p>
+                      <div className="w-16 h-1 bg-yellow-500 mx-auto mt-3 rounded-full"></div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                      {PRACTICE_AREAS.map(area => (
+                        <div key={area.id} className="p-5 sm:p-8 bg-[#0d1a2e] rounded-xl border border-slate-800 space-y-3 sm:space-y-4 hover:border-yellow-500/30 transition-all duration-300 shadow-lg">
+                          <div className="flex items-start sm:items-center space-x-3">
+                            <div className="p-2.5 bg-yellow-500/10 text-yellow-400 rounded-lg shrink-0">
+                              <LucideIcon name={area.icon} className="h-5 w-5 sm:h-6 sm:w-6" />
+                            </div>
+                            <h3 className="text-lg sm:text-xl font-bold text-white font-serif-law leading-tight">{area.title}</h3>
+                          </div>
+                          <p className="text-xs text-slate-400 leading-relaxed pl-1">{area.longDesc}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* EDUKASI HUKUM / BLOG */}
+                {activeTab === 'blog' && (
+                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {BLOG_POSTS.map(post => (
+                        <article key={post.id} className="bg-[#0d1a2e] p-6 rounded-xl border border-slate-800 flex flex-col justify-between h-full shadow-lg">
+                          <div className="space-y-3">
+                            <span className="text-[10px] text-yellow-400 uppercase font-bold tracking-wider">{post.category}</span>
+                            <h3 className="text-base sm:text-lg font-bold text-white hover:text-yellow-400 cursor-pointer transition-colors duration-200 line-clamp-2">{post.title}</h3>
+                            <p className="text-xs text-slate-400 leading-relaxed line-clamp-3">{post.summary}</p>
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </main>
+
+              {/* FOOTER - INTEGRASI TOMBOL LOGO PREMIUM & DUA ALAMAT KANTOR */}
+              <footer className="bg-[#050b14] border-t border-yellow-600/20 pt-12 pb-8 px-4 text-xs text-slate-400">
+                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-slate-900">
+                  
+                  {/* IDENTITAS & TOMBOL SOSMED BERLOGO LENGKAP */}
+                  <div className="space-y-4 text-center md:text-left">
+                    <div className="flex justify-center md:justify-start items-center space-x-2 text-slate-200 font-bold font-serif-law text-sm">
+                      <Scale className="h-4 w-4 text-yellow-500" />
+                      <span>KH LAW OFFICE</span>
+                    </div>
+                    <p className="italic text-[10px] text-yellow-600/70 tracking-wider">"Salus Populi Suprema Lex Esto"</p>
+                    
+                    <div className="flex justify-center md:justify-start flex-wrap gap-2 max-w-sm mx-auto md:mx-0 pt-2">
+                      <a href="https://wa.me/6285642238046" target="_blank" rel="noreferrer" class="inline-flex items-center space-x-2 px-3.5 py-2.5 bg-[#0d1a2e] hover:bg-slate-800 rounded-xl border border-slate-800 transition-colors text-slate-200 font-medium text-xs shadow-md w-full sm:w-auto justify-center sm:justify-start">
+                        <span class="text-emerald-500"><WhatsAppLogo className="h-4 w-4" /></span>
+                        <span>WhatsApp</span>
+                      </a>
+                      
+                      <a href="https://instagram.com/klienhukum" target="_blank" rel="noreferrer" class="inline-flex items-center space-x-2 px-3.5 py-2.5 bg-[#0d1a2e] hover:bg-slate-800 rounded-xl border border-slate-800 transition-colors text-slate-200 font-medium text-xs shadow-md w-full sm:w-auto justify-center sm:justify-start">
+                        <span class="text-pink-500"><InstagramLogo className="h-4 w-4" /></span>
+                        <span>Instagram</span>
+                      </a>
+                      
+                      <a href="mailto:klienhukumofficial@gmail.com" class="inline-flex items-center space-x-2 px-3.5 py-2.5 bg-[#0d1a2e] hover:bg-slate-800 rounded-xl border border-slate-800 transition-colors text-slate-200 font-medium text-xs shadow-md w-full sm:w-auto justify-center sm:justify-start">
+                        <span class="text-red-400"><GoogleGmailLogo className="h-4 w-4" /></span>
+                        <span>Email</span>
+                      </a>
+                      
+                      <a href="https://youtube.com/@YurisConsulting" target="_blank" rel="noreferrer" class="inline-flex items-center space-x-2 px-3.5 py-2.5 bg-[#0d1a2e] hover:bg-slate-800 rounded-xl border border-slate-800 transition-colors text-slate-200 font-medium text-xs shadow-md w-full sm:w-auto justify-center sm:justify-start">
+                        <span class="text-red-600"><YouTubeLogo className="h-4 w-4" /></span>
+                        <span>YouTube</span>
+                      </a>
+                      
+                      <a href="https://tiktok.com/@KHLaw_Office" target="_blank" rel="noreferrer" class="inline-flex items-center space-x-2 px-3.5 py-2.5 bg-[#0d1a2e] hover:bg-slate-800 rounded-xl border border-slate-800 transition-colors text-slate-200 font-medium text-xs shadow-md w-full sm:w-auto justify-center sm:justify-start">
+                        <span class="text-slate-100"><TikTokLogo className="h-4 w-4" /></span>
+                        <span>TikTok</span>
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* KANTOR CABANG SEMARANG */}
+                  <div className="space-y-2 text-center md:text-left">
+                    <h4 className="text-slate-200 font-bold tracking-wider uppercase text-[11px] flex items-center justify-center md:justify-start text-yellow-500">
+                      <MapPin className="h-3.5 w-3.5 mr-1 shrink-0" /> Office Semarang
+                    </h4>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      Jl. Medoho V, Kecamatan Gayamsari,<br />
+                      Kota Semarang, Jawa Tengah 50162<br />
+                      <span class="text-[10px] text-slate-500 italic">(Block Indonesia)</span>
+                    </p>
+                  </div>
+
+                  {/* KANTOR CABANG SURAKARTA */}
+                  <div className="space-y-2 text-center md:text-left">
+                    <h4 className="text-slate-200 font-bold tracking-wider uppercase text-[11px] flex items-center justify-center md:justify-start text-yellow-500">
+                      <MapPin className="h-3.5 w-3.5 mr-1 shrink-0" /> Office Surakarta
+                    </h4>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      Perum Kopanus Grup 2, Kecamatan Colomadu,<br />
+                      Kabupaten Karanganyar, Jawa Tengah<br />
+                      <span class="text-[10px] text-slate-500 italic">(Wilayah Solo Baru / Surakarta)</span>
+                    </p>
+                  </div>
+
+                </div>
+
+                <div className="text-center pt-6 text-slate-500 text-[11px]">
+                  © 2026 KH LAW OFFICE. Seluruh hak cipta dilindungi.
+                </div>
+              </footer>
+            </div>
+          );
+        }
+
+        const container = document.getElementById('root');
+        const root = ReactDOM.createRoot(container);
+        root.render(<App />);
+    </script>
+</body>
+</html>
